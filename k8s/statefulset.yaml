@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipfs-node
+  labels:
+    app: ipfs-node
+    version: ${VERSION}
+spec:
+  replicas: 1
+  serviceName: ipfs
+  selector:
+    matchLabels:
+      app: ipfs-node
+  template:
+    metadata:
+      labels:
+        app: ipfs-node
+        version: ${VERSION}
+    spec:
+      securityContext:
+        # The image runs as uid 1000 by default, and needs to be able to write to
+        # the persistent volume to be able to start.
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+      - name: ipfs
+        image: "ipfs/go-ipfs:v0.8.0"
+        livenessProbe:
+          tcpSocket:
+            port: swarm
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+          periodSeconds: 15
+        readinessProbe:
+          tcpSocket:
+            port: api
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 5001
+          name: api
+        - containerPort: 8080
+          name: gateway
+        volumeMounts:
+          - name: ipfs-storage
+            mountPath: /data/ipfs
+        resources:
+  volumeClaimTemplates:
+    - metadata:
+        name: ipfs-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ${IPFS_DISK_TYPE}
+        resources:
+          requests:
+            storage: ${IPFS_DISK_SIZE_STORAGE}Gi

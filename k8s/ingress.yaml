@@ -1,0 +1,31 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http
+spec:
+  entryPoints:
+    - web
+  routes:
+  - kind: Rule
+    match: Host(`${INGRESS_HOST}`)
+    services:
+    - kind: Service
+      name: ipfs
+      port: 5001
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: https
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - kind: Rule
+    match: Host(`${INGRESS_HOST}`)
+    services:
+    - kind: Service
+      name: ipfs
+      port: 8080
+  tls:
+    secretName: tls-secret
