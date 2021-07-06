@@ -7,7 +7,7 @@ metadata:
     version: ${VERSION}
 spec:
   replicas: 1
-  serviceName: ipfs
+  serviceName: ipfs-node
   selector:
     matchLabels:
       app: ipfs-node
@@ -24,7 +24,7 @@ spec:
         runAsUser: 1000
       containers:
       - name: ipfs
-        image: "ipfs/go-ipfs:v0.8.0"
+        image: "ipfs/go-ipfs:v0.9.0"
         livenessProbe:
           tcpSocket:
             port: swarm

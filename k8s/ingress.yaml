@@ -1,7 +1,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: http
+  name: api-ipfs
 spec:
   entryPoints:
     - web
@@ -16,7 +16,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: https
+  name: gateway-ipfs
 spec:
   entryPoints:
     - websecure

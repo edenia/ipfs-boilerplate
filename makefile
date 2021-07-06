@@ -28,6 +28,5 @@ build-kubernetes: ./k8s
 	done
 
 deploy-kubernetes: ##@devops Publish the build k8s files
-deploy-kubernetes: $(K8S_BUILD_DIR) ./static-k8s
-	@kubectl apply -f build_k8s
-	@kubectl apply -f static-k8s
+deploy-kubernetes: $(K8S_BUILD_DIR) ./build_k8s
+	@kubectl apply -f build_k8s -n $(NAMESPACE)
