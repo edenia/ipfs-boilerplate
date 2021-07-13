@@ -7,10 +7,10 @@ spec:
     - web
   routes:
   - kind: Rule
-    match: Host(`${INGRESS_HOST}`)
+    match: Host(`${INGRESS_HOST}`) && PathPrefix(`/api`)
     services:
     - kind: Service
-      name: ipfs
+      name: ipfs-node
       port: 5001
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -22,10 +22,10 @@ spec:
     - websecure
   routes:
   - kind: Rule
-    match: Host(`${INGRESS_HOST}`)
+    match: Host(`${INGRESS_HOST}`) && PathPrefix(`/ipfs`)
     services:
     - kind: Service
-      name: ipfs
+      name: ipfs-node
       port: 8080
   tls:
     secretName: tls-secret
